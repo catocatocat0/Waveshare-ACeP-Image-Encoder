@@ -92,26 +92,30 @@ public class EncoderMain {
             Dither dither = new Dither(image, ACEP_PALLET);
             dither.ditherImage();
 
+            //converts the image to a 8-bit color bytearray
+            int w = image.getWidth();
+            int h = image.getHeight();
+            int[] imgBuffer = new int[w*h];
+            int index = 0;
+            for(int y = 0; y < h; y++){
+                for(int x = 0; x < w; x++){
+                    imgBuffer[index] = findIndex(ACEP_LOOKUP_TABLE, convRGBAtoRGB(image.getRGB(x, y)));
+                    index++;
+                }
+            }
+
+            //compresses output to 2 colors per byte
+            int[] outputBuffer = new int[w*h/2];
+            index = 0;
+            for (int i = 0; i <= imgBuffer.length - 1; i+= 2){
+                outputBuffer[index] = (imgBuffer[i] << 4) + imgBuffer[i + 1];
+                index++;
+            }
+
             //write the byte array to a file
             try{
-                //converts the image to a 8-bit color bytearray
-                int w = image.getWidth();
-                int h = image.getHeight();
-                int[] imgBuffer = new int[w*h];
-                int index = 0;
-                for(int y = 0; y < h; y++){
-                    for(int x = 0; x < w; x++){
-                        imgBuffer[index] = findIndex(ACEP_LOOKUP_TABLE, convRGBAtoRGB(image.getRGB(x, y)));
-                        index++;
-                    }
-                }
-
-                //compresses output to 2 colors per byte
-                int[] outputBuffer = new int[w*h/2];
-                index = 0;
-                for (int i = 0; i <= imgBuffer.length - 1; i+= 2){
-                    outputBuffer[index] = (imgBuffer[i] << 4) + imgBuffer[i + 1];
-                    index++;
+                if(promptStringInput("Save image as png? (y/n): ", CONSOLE).equalsIgnoreCase("y")){
+                    ImageIO.write(image, "png", new File("output.png"));
                 }
 
                 FileWriter outputFile = new FileWriter("output.txt");
