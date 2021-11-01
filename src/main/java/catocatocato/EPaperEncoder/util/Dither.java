@@ -20,7 +20,7 @@ public class Dither {
         int[] output = new int[IMAGE.getWidth() * IMAGE.getHeight()];
         int index = 0;
 
-        //applies the Floyd–Steinberg dithering algorithm
+        //applies the dithering algorithm
         int w = IMAGE.getWidth();
         int h = IMAGE.getHeight();
 
@@ -41,32 +41,66 @@ public class Dither {
                 int errB = imgRGBPalette[2] - newRGBPalette[2];
 
                 //applies the error
+                //Floyd-Steinberg Dithering
+                /*
                 if (x + 1 < w){
-                    int update = calculateColor(IMAGE.getRGB(x + 1, y), errR, errG, errB, 7);
+                    int update = calculateColor(IMAGE.getRGB(x + 1, y), errR, errG, errB, 7, 16F);
                     IMAGE.setRGB(x + 1, y, update);
                 }
                 if (y + 1 < h) {
-                    int update = calculateColor(IMAGE.getRGB(x , y + 1), errR, errG, errB, 5);
+                    int update = calculateColor(IMAGE.getRGB(x , y + 1), errR, errG, errB, 5, 16F);
                     IMAGE.setRGB(x, y + 1, update);
                 }
                 if (x - 1 >= 0 && y + 1 < h) {
-                    int update = calculateColor(IMAGE.getRGB(x - 1, y + 1), errR, errG, errB, 3);
+                    int update = calculateColor(IMAGE.getRGB(x - 1, y + 1), errR, errG, errB, 3, 16F);
                     IMAGE.setRGB(x - 1, y + 1, update);
                 }
                 if (y + 1 < h && x + 1 < w) {
-                    int update = calculateColor(IMAGE.getRGB(x + 1, y + 1), errR, errG, errB, 1);
+                    int update = calculateColor(IMAGE.getRGB(x + 1, y + 1), errR, errG, errB, 1, 16F);
                     IMAGE.setRGB(x + 1, y + 1, update);
                 }
+                 */
+
+                //Burkes Dithering
+                if (x + 1 < w){
+                    int update = calculateColor(IMAGE.getRGB(x + 1, y), errR, errG, errB, 8, 32F);
+                    IMAGE.setRGB(x + 1, y, update);
+                }
+                if (x + 2 < w){
+                    int update = calculateColor(IMAGE.getRGB(x + 2, y), errR, errG, errB, 4, 32F);
+                    IMAGE.setRGB(x + 2, y, update);
+                }
+                if (y + 1 < h) {
+                    int update = calculateColor(IMAGE.getRGB(x , y + 1), errR, errG, errB, 8, 32F);
+                    IMAGE.setRGB(x, y + 1, update);
+                }
+                if (x - 1 >= 0 && y + 1 < h) {
+                    int update = calculateColor(IMAGE.getRGB(x - 1, y + 1), errR, errG, errB, 4, 32F);
+                    IMAGE.setRGB(x - 1, y + 1, update);
+                }
+                if (x - 2 >= 0 && y + 1 < h) {
+                    int update = calculateColor(IMAGE.getRGB(x - 2, y + 1), errR, errG, errB, 2, 32F);
+                    IMAGE.setRGB(x - 2, y + 1, update);
+                }
+                if (y + 1 < h && x + 1 < w) {
+                    int update = calculateColor(IMAGE.getRGB(x + 1, y + 1), errR, errG, errB, 4, 32F);
+                    IMAGE.setRGB(x + 1, y + 1, update);
+                }
+                if (y + 1 < h && x + 2 < w) {
+                    int update = calculateColor(IMAGE.getRGB(x + 2, y + 1), errR, errG, errB, 2, 32F);
+                    IMAGE.setRGB(x + 2, y + 1, update);
+                }
+
             }
         }
     }
 
-    public int calculateColor(int selRGB, int errR, int errG, int errB, int dither){
+    public int calculateColor(int selRGB, int errR, int errG, int errB, int dither, float base){
         int[] selRGBArray = separateRGBA(selRGB);
 
-        selRGBArray[0] += errR * (dither / 16F);
-        selRGBArray[1] += errG * (dither / 16F);
-        selRGBArray[2] += errB * (dither / 16F);
+        selRGBArray[0] += errR * (dither / base);
+        selRGBArray[1] += errG * (dither / base);
+        selRGBArray[2] += errB * (dither / base);
 
         if (selRGBArray[0] < 0) {
             selRGBArray[0] = 0;
