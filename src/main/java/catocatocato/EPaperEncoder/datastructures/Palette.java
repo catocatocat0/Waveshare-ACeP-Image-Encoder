@@ -55,13 +55,14 @@ public class Palette {
             //the higher the adj numbers are, the less pronounced the color
             if(ACeP) {
                 //this model has been adjusted to 'normalize' the colors
-                double adjBlack = 1.05;
-                double adjWhite = 1.15;
+                double adjBlack = 1.15;
+                double adjWhite = 0.8;
                 double adjRed = 1.15;
                 double adjGreen = 0.95;
                 double adjBlue = 1;
                 double adjYellow = 1;
                 double adjOrange = 1.66;
+                double adjLilac = 2;
                 switch (i) {
                     case 0: //black
                         colorDistance = colorDistance * adjBlack;
@@ -84,6 +85,10 @@ public class Palette {
                     case 6: //Orange
                         colorDistance = colorDistance * adjOrange;
                         break;
+                    case 7: //Lilac
+                        colorDistance = colorDistance * adjLilac;
+                        break;
+
                 }
             }
 

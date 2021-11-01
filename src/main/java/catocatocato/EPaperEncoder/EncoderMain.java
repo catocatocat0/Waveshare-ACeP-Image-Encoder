@@ -38,11 +38,12 @@ public class EncoderMain {
         int[][] acepPaletteRGB = {
                 {0,0,0}, //Black
                 {255,255,255}, //White
-                {0,255,0}, //Green
-                {0,0,255}, //Blue
-                {255,0,0}, //Red
-                {255,255,0}, //Yellow
-                {255,128,0}, //Orange
+                {0, 255, 0}, //Green
+                {0, 0, 255}, //Blue
+                {255, 0, 0}, //Red
+                {255, 255, 0}, //Yellow
+                {255, 128, 0,}, //Orange
+                {200 ,150 , 255 } //Lilac
         };
 
         //creates the lookup table
@@ -130,8 +131,12 @@ public class EncoderMain {
                 e.printStackTrace();
                 System.out.println("An Error Occured!");
             }
+
+            //clears memory
+            image.flush();
         }
     }
+
 
     private void endProgram(){
         System.exit(1);
