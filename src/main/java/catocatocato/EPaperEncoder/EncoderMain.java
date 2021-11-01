@@ -5,7 +5,6 @@ import catocatocato.EPaperEncoder.util.Dither;
 import javax.imageio.ImageIO;
 import java.awt.image.*;
 import java.io.*;
-import java.util.HashMap;
 import java.util.Scanner;
 import static catocatocato.EPaperEncoder.util.UtilFunctions.*;
 
@@ -13,7 +12,7 @@ public class EncoderMain {
 
     private final Scanner CONSOLE;
     private Palette ACEP_PALLET;
-    private HashMap<String, Integer> ACEP_LOOKUP_TABLE;
+    private int[] ACEP_LOOKUP_TABLE;
 
     public EncoderMain(){
         this.CONSOLE = new Scanner(System.in);
@@ -47,9 +46,9 @@ public class EncoderMain {
         };
 
         //creates the lookup table
-        ACEP_LOOKUP_TABLE = new HashMap<>();
+        ACEP_LOOKUP_TABLE = new int[acepPaletteRGB.length];
         for (int i = 0; i <= acepPaletteRGB.length - 1; i++){
-            ACEP_LOOKUP_TABLE.put(""+combineRGBA(acepPaletteRGB[i]), i);
+            ACEP_LOOKUP_TABLE[i] = combineRGBA(acepPaletteRGB[i]);
         }
 
         int[] acepPaletteHex = new int[acepPaletteRGB.length];
@@ -102,14 +101,13 @@ public class EncoderMain {
                 int index = 0;
                 for(int y = 0; y < h; y++){
                     for(int x = 0; x < w; x++){
-                        imgBuffer[index] = ACEP_LOOKUP_TABLE.get(""+convRGBAtoRGB(image.getRGB(x, y)));
+                        imgBuffer[index] = findIndex(ACEP_LOOKUP_TABLE, convRGBAtoRGB(image.getRGB(x, y)));
                         index++;
                     }
                 }
 
                 //compresses output to 2 colors per byte
                 int[] outputBuffer = new int[w*h/2];
-
                 index = 0;
                 for (int i = 0; i <= imgBuffer.length - 1; i+= 2){
                     outputBuffer[index] = (imgBuffer[i] << 4) + imgBuffer[i + 1];

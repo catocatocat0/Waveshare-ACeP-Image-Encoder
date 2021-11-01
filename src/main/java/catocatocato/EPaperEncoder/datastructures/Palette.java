@@ -31,7 +31,7 @@ public class Palette {
     }
 
     //finds the closest color in the palette to a hex color
-    //rgbHex - the color you want to match
+    //rgbHex - the color you want to match in hex form
     //returns the closest matching color from the palette
     public int findClosestColor(int rgbHex){
         int[][] rgbPalette = getRGBPalette();

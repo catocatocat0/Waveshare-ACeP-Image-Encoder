@@ -1,6 +1,5 @@
 package catocatocato.EPaperEncoder.util;
 
-import java.util.InputMismatchException;
 import java.util.Scanner;
 
 public class UtilFunctions {
@@ -13,19 +12,24 @@ public class UtilFunctions {
         return CONSOLE.next();
     }
 
-    public static double PrompNumInput(String promptText, Scanner CONSOLE){
-        System.out.println(promptText);
-        while (true){
-            try{
-                return CONSOLE.nextDouble();
-            }catch (InputMismatchException e){
-                System.out.println("Invalid input!");
+    //finds the index of an array given a value
+    //array - array given
+    //value - value you want to search the index of
+    //outputs the index number
+    public static int findIndex(int[] array, int value) {
+        int index = -1;
+
+        for(int i = 0; i <= array.length - 1; i++) {
+            if (array[i] == value) {
+                index = i;
+                break;
             }
         }
+        return index;
     }
 
     //converts 32bit RGBA into R, G and B components as an int[3], index are ordered RGB
-    //RGBA the 32bit RGBA integer
+    //RGBA - the 32bit RGBA integer
     //return an int[] with separate RGB values
     public static int[] separateRGBA(int RGBA){
         int[] colorChannels = new int[4];
